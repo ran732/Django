@@ -1,0 +1,171 @@
+{% extends "user/base.html" %}
+
+
+{% block content %}
+
+<!-- ================= HEADER ================= -->
+<section class="bg-primary text-white py-5">
+    <div class="container text-center">
+        <h1 class="fw-bold">🎉 College Events</h1>
+        <p class="lead">Stay updated with upcoming and recent events</p>
+    </div>
+</section>
+
+
+<!-- ================= EVENTS SECTION ================= -->
+<section class="py-5 bg-light">
+<div class="container">
+
+    <h2 class="text-center mb-5 fw-bold text-dark">
+        Upcoming Events
+    </h2>
+
+    <div class="row g-4">
+
+        {% for event in events %}
+
+        <!-- EVENT CARD -->
+        <div class="col-md-6 col-lg-4">
+
+            <div class="card event-card h-100 shadow-sm border-0">
+
+                <!-- Card Body -->
+                <div class="card-body d-flex flex-column">
+
+                    <!-- Event Title -->
+                    <h4 class="card-title text-primary fw-semibold">
+                        {{ event.name }}
+                    </h4>
+
+                    <!-- Date -->
+                    <p class="text-muted mb-2">
+                        📅 {{ event.event_date }}
+                    </p>
+
+                    <!-- Details Preview -->
+                    <p class="card-text flex-grow-1">
+                        {{ event.details|truncatewords:25 }}
+                    </p>
+
+                    <!-- Button -->
+                    <button class="btn btn-outline-primary mt-3"
+                            data-bs-toggle="modal"
+                            data-bs-target="#eventModal{{ event.id }}">
+                        View Details
+                    </button>
+
+                </div>
+
+            </div>
+        </div>
+
+
+        <!-- ================= MODAL ================= -->
+        <div class="modal fade"
+             id="eventModal{{ event.id }}"
+             tabindex="-1">
+
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+                <div class="modal-content">
+
+                    <!-- Header -->
+                    <div class="modal-header bg-primary text-white">
+                        <h5 class="modal-title">
+                            {{ event.name }}
+                        </h5>
+
+                        <button type="button"
+                                class="btn-close btn-close-white"
+                                data-bs-dismiss="modal"></button>
+                    </div>
+
+                    <!-- Body -->
+                    <div class="modal-body">
+
+                        <p class="text-muted">
+                            📅 Event Date: {{ event.event_date }}
+                        </p>
+
+                        <hr>
+
+                        <p>
+                            {{ event.details|safe }}
+                        </p>
+
+                    </div>
+
+                    <!-- Footer -->
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary"
+                                data-bs-dismiss="modal">
+                            Close
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+        {% empty %}
+
+        <!-- No Events -->
+        <div class="text-center">
+            <h4 class="text-muted">No events available</h4>
+        </div>
+
+        {% endfor %}
+
+    </div>
+</div>
+</section>
+
+
+
+
+<!-- ================= CUSTOM CSS ================= -->
+<style>
+
+/* Event Card Styling */
+.event-card {
+    border-radius: 15px;
+    transition: 0.3s ease;
+}
+
+.event-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+}
+
+/* Feature Section */
+.feature-box {
+    background: #f8f9fa;
+    border-radius: 12px;
+    transition: 0.3s;
+}
+
+.feature-box:hover {
+    background: #e9ecef;
+    transform: scale(1.05);
+}
+
+/* Modal Smooth Animation */
+.modal-content {
+    border-radius: 12px;
+}
+
+/* Typography Improvement */
+h1, h2, h3, h4 {
+    letter-spacing: 0.5px;
+}
+
+/* Responsive spacing */
+@media(max-width:768px){
+    .event-card {
+        margin-bottom: 20px;
+    }
+}
+
+</style>
+
+{% endblock %}

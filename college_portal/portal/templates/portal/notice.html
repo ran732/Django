@@ -1,0 +1,174 @@
+
+
+
+{% extends "user/base.html" %}
+{% load static %}
+
+{% block content %}
+
+<!-- ================= HERO SECTION ================= -->
+<section class="bg-primary text-white py-5">
+    <div class="container text-center">
+        <h1 class="fw-bold">📢 College Notices</h1>
+        <p class="lead">
+            Important announcements and updates for students
+        </p>
+    </div>
+</section>
+
+
+<!-- ================= NOTICE SECTION ================= -->
+<section class="py-5 bg-light">
+<div class="container">
+
+    <h2 class="text-center fw-bold mb-5 text-dark">
+        Latest Announcements
+    </h2>
+
+    <div class="row g-4">
+
+        {% for notice in notices %}
+
+        <!-- NOTICE CARD -->
+        <div class="col-md-6 col-lg-4">
+
+            <div class="card notice-card h-100 shadow-sm border-0">
+
+                <div class="card-body d-flex flex-column">
+
+                    <!-- Title -->
+                    <h5 class="card-title text-primary fw-semibold">
+                        {{ notice.title }}
+                    </h5>
+
+                    <!-- Date -->
+                    <p class="text-muted mb-2">
+                        🗓 {{ notice.notice_date }}
+                    </p>
+
+                    <!-- Preview -->
+                    <p class="card-text flex-grow-1">
+                        {{ notice.description|striptags|truncatewords:20 }}
+                    </p>
+
+                    <!-- Button -->
+                    <button class="btn btn-outline-primary mt-3"
+                            data-bs-toggle="modal"
+                            data-bs-target="#noticeModal{{ notice.id }}">
+                        View Full Notice
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================= MODAL ================= -->
+        <div class="modal fade"
+             id="noticeModal{{ notice.id }}"
+             tabindex="-1">
+
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+                <div class="modal-content">
+
+                    <!-- Header -->
+                    <div class="modal-header bg-primary text-white">
+                        <h5 class="modal-title">
+                            {{ notice.title }}
+                        </h5>
+
+                        <button type="button"
+                                class="btn-close btn-close-white"
+                                data-bs-dismiss="modal"></button>
+                    </div>
+
+                    <!-- Body -->
+                    <div class="modal-body">
+
+                        <p class="text-muted">
+                            📅 Published: {{ notice.notice_date }}
+                        </p>
+
+                        <hr>
+
+                        <div>
+                            {{ notice.description|safe }}
+                        </div>
+
+                    </div>
+
+                    <!-- Footer -->
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary"
+                                data-bs-dismiss="modal">
+                            Close
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+        {% empty %}
+
+        <div class="text-center py-5">
+            <h4 class="text-muted">No notices available</h4>
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+</div>
+</section>
+
+
+
+<!-- ================= CUSTOM CSS ================= -->
+<style>
+
+/* Notice Cards */
+.notice-card{
+    border-radius: 15px;
+    transition: 0.3s ease;
+}
+
+.notice-card:hover{
+    transform: translateY(-8px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+}
+
+/* Info Section */
+.info-box{
+    background:#f8f9fa;
+    border-radius:12px;
+    transition:0.3s;
+}
+
+.info-box:hover{
+    background:#e9ecef;
+    transform:scale(1.05);
+}
+
+/* Modal Styling */
+.modal-content{
+    border-radius:12px;
+}
+
+/* Typography */
+h1,h2,h3,h4{
+    letter-spacing:0.5px;
+}
+
+@media(max-width:768px){
+    .notice-card{
+        margin-bottom:20px;
+    }
+}
+
+</style>
+
+{% endblock %}

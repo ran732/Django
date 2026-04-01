@@ -1,0 +1,119 @@
+{% extends "user/base.html" %} {% block content %}
+
+<div
+  class="container-fluid d-flex align-items-center justify-content-center"
+  style="min-height: 90vh"
+>
+  <div class="col-11 col-sm-8 col-md-6 col-lg-4 col-xl-3">
+    <div class="card border-0 shadow-lg" style="border-radius: 1rem">
+      <div class="card-body p-4 p-md-5">
+        <!-- Header -->
+        <div class="text-center mb-4">
+          <div
+            class="bg-primary text-white d-inline-block rounded-circle p-3 mb-2"
+          >
+            <i class="bi bi-person-fill" style="font-size: 2rem"></i>
+          </div>
+          <h2 class="fw-bold mb-1">Login</h2>
+          <p class="text-muted small">Access your account securely</p>
+        </div>
+
+        <!-- Form Start -->
+        <form method="POST" autocomplete="off">
+          {% csrf_token %}
+
+          <!-- Username -->
+          <div class="form-floating mb-3">
+            <input
+              type="text"
+              name="username"
+              class="form-control"
+              id="username"
+              placeholder="Username"
+              required
+            />
+            <label for="username">Username</label>
+          </div>
+
+          <!-- Password -->
+          <div class="form-floating mb-3">
+            <input
+              type="password"
+              name="password"
+              class="form-control"
+              id="password"
+              placeholder="Password"
+              required
+            />
+            <label for="password">Password</label>
+          </div>
+
+          <!-- Show Password -->
+          <div class="form-check mb-3">
+            <input
+              type="checkbox"
+              class="form-check-input"
+              onclick="showPassword()"
+              id="showPass"
+            />
+            <label class="form-check-label" for="showPass">
+              Show Password
+            </label>
+          </div>
+
+          <!-- Error Message -->
+          {% if error %}
+          <div class="alert alert-danger p-2 mb-3">
+            <small>Invalid username or password.</small>
+          </div>
+          {% endif %}
+
+          <!-- Login Button -->
+          <div class="d-grid gap-2 mt-4">
+            <button
+              type="submit"
+              class="btn btn-primary btn-lg rounded-pill shadow-sm"
+            >
+              Login
+            </button>
+          </div>
+        </form>
+        <!-- Form End -->
+
+        <!-- Footer -->
+        <div class="text-center mt-4">
+          <a href="#" class="text-muted text-decoration-none small"
+            >Forgot password?</a
+          >
+
+          <hr class="my-4" />
+
+          <p class="mb-0 small">
+            New here?
+            <a
+              href="{% url 'ragister' %}"
+              class="fw-bold text-decoration-none text-primary"
+            >
+              Create Account
+            </a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Show Password Script -->
+
+<script>
+  function showPassword() {
+    let pass = document.getElementById("password");
+
+    if (pass.type === "password") {
+      pass.type = "text";
+    } else {
+      pass.type = "password";
+    }
+  }
+</script>
+{% endblock %}
