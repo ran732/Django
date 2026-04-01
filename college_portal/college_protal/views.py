@@ -9,6 +9,9 @@ def homepage(request):
 def home(request):
     return render(request, "home/index.html")
 
+def frontpage(request):
+    return render(request, "home/frontpage.html")
+
 def login_view(request):
     if request.method == "POST":
         password = request.POST.get("password")

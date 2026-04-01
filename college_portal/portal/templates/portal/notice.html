@@ -38,17 +38,17 @@
 
                     <!-- Title -->
                     <h5 class="card-title text-primary fw-semibold">
-                        {{ notice.title }}
+                        <center>{{ notice.title }}</center>
                     </h5>
 
                     <!-- Date -->
                     <p class="text-muted mb-2">
-                        🗓 {{ notice.notice_date }}
+                        <center>🗓 {{ notice.notice_date }}</center>
                     </p>
 
                     <!-- Preview -->
                     <p class="card-text flex-grow-1">
-                        {{ notice.description|striptags|truncatewords:20 }}
+                        {{ notice.description|safe }}
                     </p>
 
                     <!-- Button -->

@@ -1,119 +1,253 @@
-{% extends "user/base.html" %} {% block content %}
+{% extends "user/base.html" %}
 
-<div
-  class="container-fluid d-flex align-items-center justify-content-center"
-  style="min-height: 90vh"
->
-  <div class="col-11 col-sm-8 col-md-6 col-lg-4 col-xl-3">
-    <div class="card border-0 shadow-lg" style="border-radius: 1rem">
-      <div class="card-body p-4 p-md-5">
-        <!-- Header -->
-        <div class="text-center mb-4">
-          <div
-            class="bg-primary text-white d-inline-block rounded-circle p-3 mb-2"
-          >
-            <i class="bi bi-person-fill" style="font-size: 2rem"></i>
-          </div>
-          <h2 class="fw-bold mb-1">Login</h2>
-          <p class="text-muted small">Access your account securely</p>
+{% block extra_css %}
+<!-- Bootstrap Icons -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+<style>
+/* Remove unwanted scrollbars */
+body { overflow-x: hidden; }
+
+/* Breakout of base container */
+.auth-breakout {
+    width: 100vw;
+    min-height: calc(100vh - 100px);
+    position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+    margin-top: -24px;
+    padding: 40px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+}
+
+/* Glassmorphism Panel */
+.auth-glass {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    border-radius: 24px;
+    padding: 3rem 2.5rem;
+    width: 100%;
+    max-width: 480px;
+    animation: fadeInScale 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes fadeInScale {
+    0% { opacity: 0; transform: scale(0.95) translateY(20px); }
+    100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.auth-header {
+    text-align: center;
+    margin-bottom: 25px;
+}
+.auth-header h2 {
+    color: white;
+    font-weight: 800;
+    font-size: 2rem;
+    margin-bottom: 5px;
+}
+.auth-header p {
+    color: #94a3b8;
+    font-size: 0.95rem;
+}
+
+/* Form Styles */
+.form-floating > label {
+    color: #94a3b8;
+    padding-left: 20px;
+}
+.form-control {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: white !important;
+    border-radius: 16px;
+    height: 3.5rem;
+}
+.form-control:focus {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 0 15px rgba(59, 130, 246, 0.3);
+}
+.form-control::placeholder {
+    color: transparent;
+}
+/* Deal with Chrome autocomplete weirdness */
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active{
+    -webkit-box-shadow: 0 0 0 30px #1e293b inset !important;
+    -webkit-text-fill-color: white !important;
+    transition: background-color 5000s ease-in-out 0s;
+}
+
+.form-check-label {
+    color: #cbd5e1;
+    font-size: 0.9rem;
+}
+
+.btn-primary-auth {
+    background: #3b82f6;
+    border: none;
+    border-radius: 12px;
+    font-weight: 600;
+    padding: 12px;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+.btn-primary-auth:hover {
+    background: #2563eb;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(37, 99, 235, 0.4);
+}
+
+/* Divider */
+.divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: #64748b;
+    margin: 25px 0;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+.divider::before, .divider::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+.divider:not(:empty)::before { margin-right: 15px; }
+.divider:not(:empty)::after { margin-left: 15px; }
+
+/* Social Buttons */
+.social-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: white;
+    border-radius: 12px;
+    padding: 10px;
+    font-weight: 500;
+    transition: all 0.3s;
+    text-decoration: none;
+    width: 100%;
+    margin-bottom: 10px;
+}
+.social-btn:hover {
+    background: rgba(255,255,255,0.15);
+    color: white;
+    transform: translateY(-2px);
+    border-color: rgba(255,255,255,0.3);
+}
+.social-btn i {
+    font-size: 1.25rem;
+}
+
+.bottom-links {
+    text-align: center;
+    margin-top: 20px;
+}
+.bottom-links a {
+    color: #60a5fa;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s;
+}
+.bottom-links a:hover {
+    color: #bfdbfe;
+    text-decoration: underline;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="auth-breakout">
+    <div class="auth-glass">
+        
+        <div class="auth-header">
+            <h2>Welcome Back</h2>
+            <p>Access your college portal account</p>
         </div>
 
         <!-- Form Start -->
         <form method="POST" autocomplete="off">
-          {% csrf_token %}
+            {% csrf_token %}
+            
+            <!-- Username -->
+            <div class="form-floating mb-3">
+                <input type="text" name="username" class="form-control" id="username" placeholder="Username" required>
+                <label for="username"><i class="bi bi-person me-2"></i>Username</label>
+            </div>
 
-          <!-- Username -->
-          <div class="form-floating mb-3">
-            <input
-              type="text"
-              name="username"
-              class="form-control"
-              id="username"
-              placeholder="Username"
-              required
-            />
-            <label for="username">Username</label>
-          </div>
+            <!-- Password -->
+            <div class="form-floating mb-3">
+                <input type="password" name="password" class="form-control" id="password" placeholder="Password" required>
+                <label for="password"><i class="bi bi-lock me-2"></i>Password</label>
+            </div>
 
-          <!-- Password -->
-          <div class="form-floating mb-3">
-            <input
-              type="password"
-              name="password"
-              class="form-control"
-              id="password"
-              placeholder="Password"
-              required
-            />
-            <label for="password">Password</label>
-          </div>
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" onclick="showPassword()" id="showPass">
+                    <label class="form-check-label" for="showPass">Show Password</label>
+                </div>
+                <a href="#" class="text-decoration-none" style="font-size:0.9rem; color:#60a5fa;">Forgot Password?</a>
+            </div>
 
-          <!-- Show Password -->
-          <div class="form-check mb-3">
-            <input
-              type="checkbox"
-              class="form-check-input"
-              onclick="showPassword()"
-              id="showPass"
-            />
-            <label class="form-check-label" for="showPass">
-              Show Password
-            </label>
-          </div>
+            <!-- Error Message -->
+            {% if error %}
+            <div class="alert alert-danger p-2 mb-3 rounded-3 border-0 bg-danger text-white bg-opacity-75">
+                <small><i class="bi bi-exclamation-triangle-fill me-2"></i>Invalid username or password.</small>
+            </div>
+            {% endif %}
 
-          <!-- Error Message -->
-          {% if error %}
-          <div class="alert alert-danger p-2 mb-3">
-            <small>Invalid username or password.</small>
-          </div>
-          {% endif %}
-
-          <!-- Login Button -->
-          <div class="d-grid gap-2 mt-4">
-            <button
-              type="submit"
-              class="btn btn-primary btn-lg rounded-pill shadow-sm"
-            >
-              Login
-            </button>
-          </div>
+            <!-- Login Button -->
+            <button type="submit" class="btn btn-primary btn-primary-auth text-white">Login Securely</button>
         </form>
-        <!-- Form End -->
+
+        <div class="divider">Or continue with</div>
+
+        <!-- All Possible Ways of Login (Socials) -->
+        <a href="#" class="social-btn">
+            <i class="bi bi-google text-danger"></i> Sign in with Google
+        </a>
+        <a href="#" class="social-btn">
+            <i class="bi bi-microsoft text-info"></i> Sign in with Microsoft
+        </a>
+        <a href="#" class="social-btn mb-4">
+            <i class="bi bi-apple text-light"></i> Sign in with Apple
+        </a>
 
         <!-- Footer -->
-        <div class="text-center mt-4">
-          <a href="#" class="text-muted text-decoration-none small"
-            >Forgot password?</a
-          >
-
-          <hr class="my-4" />
-
-          <p class="mb-0 small">
-            New here?
-            <a
-              href="{% url 'ragister' %}"
-              class="fw-bold text-decoration-none text-primary"
-            >
-              Create Account
-            </a>
-          </p>
+        <div class="bottom-links border-top pt-3" style="border-color: rgba(255,255,255,0.1) !important;">
+            <p class="mb-0 text-light small">
+                New to the portal? <a href="{% url 'ragister' %}">Create an Account</a>
+            </p>
         </div>
-      </div>
+
     </div>
-  </div>
 </div>
 
-<!-- Show Password Script -->
-
 <script>
-  function showPassword() {
+function showPassword() {
     let pass = document.getElementById("password");
-
     if (pass.type === "password") {
-      pass.type = "text";
+        pass.type = "text";
     } else {
-      pass.type = "password";
+        pass.type = "password";
     }
-  }
+}
 </script>
 {% endblock %}

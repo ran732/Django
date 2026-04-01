@@ -34,17 +34,17 @@
 
                     <!-- Event Title -->
                     <h4 class="card-title text-primary fw-semibold">
-                        {{ event.name }}
+                        <center>{{ event.name }}</center>
                     </h4>
 
                     <!-- Date -->
                     <p class="text-muted mb-2">
-                        📅 {{ event.event_date }}
+                        <center>📅 {{ event.event_date }}</center>
                     </p>
 
                     <!-- Details Preview -->
                     <p class="card-text flex-grow-1">
-                        {{ event.details|truncatewords:25 }}
+                        {{ event.details|safe }}
                     </p>
 
                     <!-- Button -->

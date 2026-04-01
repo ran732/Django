@@ -1,0 +1,553 @@
+{% extends "user/base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<!-- Bootstrap Icons -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+<style>
+/* ---------- GLOBAL VARIABLES ---------- */
+:root {
+    --primary: #1e40af; /* Indigo 800 */
+    --secondary: #3b82f6; /* Blue 500 */
+    --accent: #60a5fa; /* Blue 400 */
+    --background: #f8fafc; /* Slate 50 */
+    --surface: #ffffff;
+    --text-main: #0f172a; /* Slate 900 */
+    --text-muted: #64748b; /* Slate 500 */
+    --border: #e2e8f0;
+    --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    --shadow-glow: 0 10px 30px rgba(59, 130, 246, 0.3);
+}
+
+body {
+    background: var(--background);
+    font-family: 'Outfit', sans-serif;
+    color: var(--text-main);
+}
+
+/* Animations */
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-up {
+    animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.delay-100 { animation-delay: 100ms; }
+.delay-200 { animation-delay: 200ms; }
+
+/* Section Titles */
+.section-title {
+    font-weight: 700;
+    font-size: 2rem;
+    margin-bottom: 30px;
+    position: relative;
+    padding-left: 20px;
+    color: var(--text-main);
+}
+.section-title::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 6px;
+    height: 100%;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    border-radius: 4px;
+}
+
+/* ---------- BREAKOUT CONTAINER HERO ---------- */
+.hero-breakout {
+    width: 100vw;
+    position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+    margin-top: -24px; /* Counter mt-4 from base.html container */
+    padding-bottom: 80px;
+}
+
+.hero {
+    background: linear-gradient(135deg, rgba(15, 23, 42, 0.85), rgba(30, 64, 175, 0.75)), 
+                url("{% static 'images/campus-bg.jpg' %}") center/cover no-repeat fixed;
+    color: white;
+    padding: 120px 20px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero h1 {
+    font-weight: 800;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    letter-spacing: -1px;
+    margin-bottom: 20px;
+    text-shadow: 0 4px 20px rgba(0,0,0,0.4);
+}
+
+.hero .lead {
+    font-size: 1.25rem;
+    font-weight: 300;
+    opacity: 0.9;
+    margin-bottom: 40px;
+}
+
+/* Glassmorphism Search Bar */
+.search-glass {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50px;
+    padding: 10px;
+    box-shadow: var(--shadow-lg);
+    display: flex;
+    max-width: 600px;
+    margin: 0 auto;
+    transition: all 0.3s ease;
+}
+
+.search-glass:focus-within {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.4);
+    box-shadow: 0 0 30px rgba(255,255,255,0.2);
+    transform: translateY(-2px);
+}
+
+.search-glass input {
+    background: transparent;
+    border: none;
+    color: white;
+    padding-left: 20px;
+    font-size: 1.1rem;
+    width: 100%;
+    font-weight: 400;
+}
+.search-glass input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+.search-glass input:focus {
+    outline: none;
+    box-shadow: none;
+    background: transparent;
+    color: white;
+}
+
+.search-glass button {
+    border-radius: 40px;
+    padding: 12px 30px;
+    font-weight: 600;
+    font-size: 1rem;
+    background: white;
+    color: var(--primary);
+    border: none;
+    transition: all 0.3s ease;
+}
+.search-glass button:hover {
+    background: var(--primary);
+    color: white;
+    box-shadow: var(--shadow-glow);
+}
+
+/* ---------- FLOATING CARDS (Notices & Events) ---------- */
+.portal-card {
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    background: var(--surface);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+    position: relative;
+    z-index: 1;
+}
+
+.portal-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(255,255,255,0), rgba(59,130,246,0.05));
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    z-index: -1;
+}
+
+.portal-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--accent);
+}
+.portal-card:hover::after {
+    opacity: 1;
+}
+
+.date-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 14px;
+    background: rgba(59, 130, 246, 0.1);
+    color: var(--secondary);
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+.date-badge-success {
+    background: rgba(16, 185, 129, 0.1);
+    color: #10b981;
+}
+
+.card-title-modern {
+    font-weight: 700;
+    font-size: 1.25rem;
+    color: var(--text-main);
+    line-height: 1.4;
+    margin-bottom: 12px;
+}
+
+.card-text-modern {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+.btn-modern {
+    background: transparent;
+    color: var(--secondary);
+    border: 2px solid var(--secondary);
+    font-weight: 600;
+    border-radius: 12px;
+    padding: 8px 24px;
+    transition: all 0.3s ease;
+    display: inline-block;
+    text-align: center;
+    text-decoration: none;
+}
+
+.btn-modern:hover {
+    background: var(--secondary);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-glow);
+}
+
+/* ---------- BENTO BOX SERVICES ---------- */
+.quick-link {
+    text-decoration: none;
+    color: var(--text-main);
+    display: block;
+    height: 100%;
+}
+
+.quick-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 30px 20px;
+    text-align: center;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: var(--shadow-sm);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.quick-box::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    z-index: 1;
+}
+
+.quick-box .service-content {
+    position: relative;
+    z-index: 2;
+    transition: all 0.4s ease;
+}
+
+.quick-icon {
+    font-size: 2.5rem;
+    color: var(--secondary);
+    margin-bottom: 15px;
+    transition: all 0.4s ease;
+}
+
+.quick-title {
+    font-weight: 600;
+    font-size: 1.1rem;
+    margin: 0;
+    transition: all 0.4s ease;
+}
+
+.quick-box:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: var(--shadow-glow);
+    border-color: transparent;
+}
+
+.quick-box:hover::before {
+    opacity: 1;
+}
+
+.quick-box:hover .quick-icon, 
+.quick-box:hover .quick-title {
+    color: white;
+}
+
+.quick-box:hover .quick-icon {
+    transform: scale(1.1) translateY(-5px);
+}
+
+/* ---------- HIGHLIGHTS ---------- */
+.highlights-section {
+    background: linear-gradient(135deg, var(--primary), var(--text-main));
+    border-radius: 24px;
+    padding: 60px 40px;
+    color: white;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    box-shadow: var(--shadow-lg);
+    position: relative;
+    overflow: hidden;
+}
+
+.highlights-section::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -10%;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+    border-radius: 50%;
+}
+
+.metric-box h2 {
+    font-size: 3.5rem;
+    font-weight: 800;
+    margin-bottom: 5px;
+    background: linear-gradient(180deg, #ffffff, #93c5fd);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0px 10px 20px rgba(0,0,0,0.2);
+}
+
+.metric-box p {
+    font-size: 1.1rem;
+    font-weight: 500;
+    opacity: 0.9;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+/* Utilities */
+.mt-7 { margin-top: 4rem; }
+.mb-7 { margin-bottom: 4rem; }
+
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- ================= HERO ================= -->
+<div class="hero-breakout">
+    <section class="hero">
+        <div class="container animate-fade-up">
+            <h1>ABC College Portal</h1>
+            <p class="lead delay-100">Excellence Through Knowledge, Innovation, & Leadership</p>
+
+            <form method="GET" action="/search/" class="mt-5 search-glass delay-200">
+                <i class="bi bi-search d-flex align-items-center ps-3 text-white fs-5 opacity-75"></i>
+                <input name="q" type="text" placeholder="Search notices, events, results...">
+                <button type="submit">Search</button>
+            </form>
+        </div>
+    </section>
+</div>
+
+<!-- Container for content elements -->
+<div class="container mb-7" style="position: relative; z-index: 5;">
+
+    <!-- ================= NOTICES ================= -->
+    <div class="d-flex justify-content-between align-items-center mb-4 animate-fade-up">
+        <h3 class="section-title mb-0 pb-0"><i class="bi bi-megaphone-fill me-2 text-primary"></i> Latest Notices</h3>
+        <a href="{% url 'portal:notice' %}" class="btn btn-outline-primary fw-bold" style="border-radius: 50px; padding: 8px 24px;">View All</a>
+    </div>
+
+    <div class="row g-4 mb-7 animate-fade-up delay-100">
+    {% for notice in latest_notices %}
+        <div class="col-lg-4 col-md-6">
+            <div class="card portal-card h-100 p-2">
+                <div class="card-body d-flex flex-column">
+                    <div class="date-badge">
+                        <i class="bi bi-calendar3 me-2"></i> {{ notice.created_at|date:"F d, Y" }}
+                    </div>
+                    <h5 class="card-title-modern">{{ notice.title }}</h5>
+                    <p class="card-text-modern flex-grow-1">
+                        {{ notice.description|safe|truncatewords:20 }}
+                    </p>
+                    <div class="mt-auto pt-3">
+                        <a href="#" class="btn-modern w-100">Read Full Notice <i class="bi bi-arrow-right ms-1"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% empty %}
+        <!-- Fallback if there are no notices -->
+        <div class="col-12 py-3 text-center text-muted">
+            <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+            <p>No notices available currently.</p>
+        </div>
+    {% endfor %}
+    </div>
+
+    <!-- ================= EVENTS ================= -->
+    <div class="d-flex justify-content-between align-items-center mb-4 animate-fade-up">
+        <h3 class="section-title mb-0 pb-0"><i class="bi bi-calendar-event-fill me-2 text-primary"></i> Upcoming Events</h3>
+        <a href="{% url 'portal:event' %}" class="btn btn-outline-success fw-bold" style="border-radius: 50px; padding: 8px 24px;">View All</a>
+    </div>
+
+    <div class="row g-4 mb-7 animate-fade-up delay-100">
+    {% for event in upcoming_events %}
+        <div class="col-lg-4 col-md-6">
+            <div class="card portal-card h-100 p-2">
+                <div class="card-body d-flex flex-column">
+                    <div class="date-badge date-badge-success">
+                        <i class="bi bi-clock-fill me-2"></i> {{ event.date }}
+                    </div>
+                    <h5 class="card-title-modern">{{ event.title }}</h5>
+                    <p class="card-text-modern flex-grow-1">
+                        {{ event.description|safe|truncatewords:20 }}
+                    </p>
+                    <div class="mt-auto pt-3 text-end">
+                        <a href="#" class="text-decoration-none fw-bold" style="color: #10b981;">View Details <i class="bi bi-chevron-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% empty %}
+        <!-- Fallback if there are no events -->
+        <div class="col-12 py-3 text-center text-muted">
+            <i class="bi bi-calendar-x fs-1 d-block mb-2"></i>
+            <p>No upcoming events.</p>
+        </div>
+    {% endfor %}
+    </div>
+
+    <!-- ================= QUICK SERVICES ================= -->
+    <h3 class="section-title animate-fade-up"><i class="bi bi-lightning-charge-fill me-2 text-primary"></i> Student Services</h3>
+
+    <div class="row g-4 mb-7 animate-fade-up delay-200">
+        <div class="col-xl-2 col-lg-4 col-sm-6 col-6">
+            <a href="#" class="quick-link">
+                <div class="quick-box">
+                    <div class="service-content">
+                        <i class="bi bi-bar-chart-fill quick-icon"></i>
+                        <h4 class="quick-title">Results</h4>
+                    </div>
+                </div>
+            </a>
+        </div>
+        
+        <div class="col-xl-2 col-lg-4 col-sm-6 col-6">
+            <a href="#" class="quick-link">
+                <div class="quick-box">
+                    <div class="service-content">
+                        <i class="bi bi-calendar2-range-fill quick-icon"></i>
+                        <h4 class="quick-title">Time Table</h4>
+                    </div>
+                </div>
+            </a>
+        </div>
+        
+        <div class="col-xl-2 col-lg-4 col-sm-6 col-6">
+            <a href="#" class="quick-link">
+                <div class="quick-box">
+                    <div class="service-content">
+                        <i class="bi bi-book-half quick-icon"></i>
+                        <h4 class="quick-title">Library</h4>
+                    </div>
+                </div>
+            </a>
+        </div>
+        
+        <div class="col-xl-2 col-lg-4 col-sm-6 col-6">
+            <a href="#" class="quick-link">
+                <div class="quick-box">
+                    <div class="service-content">
+                        <i class="bi bi-journal-text quick-icon"></i>
+                        <h4 class="quick-title">Notes</h4>
+                    </div>
+                </div>
+            </a>
+        </div>
+        
+        <div class="col-xl-2 col-lg-4 col-sm-6 col-6">
+            <a href="#" class="quick-link">
+                <div class="quick-box">
+                    <div class="service-content">
+                        <i class="bi bi-wallet2 quick-icon"></i>
+                        <h4 class="quick-title">Fees</h4>
+                    </div>
+                </div>
+            </a>
+        </div>
+        
+        <div class="col-xl-2 col-lg-4 col-sm-6 col-6">
+            <a href="#" class="quick-link">
+                <div class="quick-box">
+                    <div class="service-content">
+                        <i class="bi bi-briefcase-fill quick-icon"></i>
+                        <h4 class="quick-title">Placement</h4>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <!-- ================= ACHIEVEMENTS ================= -->
+    <div class="highlights-section animate-fade-up delay-200">
+        <div class="row text-center z-1 position-relative">
+            <div class="col-md-4 mb-4 mb-md-0">
+                <div class="metric-box">
+                    <h2>95%</h2>
+                    <p>Placement Rate</p>
+                </div>
+            </div>
+            
+            <div class="col-md-4 mb-4 mb-md-0">
+                <div class="metric-box">
+                    <h2>50+</h2>
+                    <p>Companies Visited</p>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="metric-box">
+                    <h2>10k+</h2>
+                    <p>Students Enrolled</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

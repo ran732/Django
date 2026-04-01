@@ -24,7 +24,8 @@ urlpatterns = [
     path('tinymce/', include('tinymce.urls')),  # IMPORTANT
     path('portal',include('portal.urls')),  #connect Portal app here
     path("home",views.homepage,name="homepage"),
-    path("",views.home,name="home"),
+    path("info",views.home,name="home"),
     path("login",views.login_view, name="login"),
     path("ragister",views.ragister_view, name="ragister"),
+    path("",views.frontpage, name="frontpage"),
 ]
