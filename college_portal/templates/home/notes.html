@@ -1,0 +1,74 @@
+{% extends "user/base.html" %}
+
+{% block content %}
+
+<div class="container mt-5">
+  <h2 class="mb-4 text-primary">📚 Study Notes</h2>
+
+  <div class="row">
+
+{% for note in notes %}
+<div class="col-md-6 col-lg-4 mb-4">
+  <div class="card shadow-sm h-100">
+
+    <div class="card-body">
+
+      <h5 class="card-title">{{ note.title }}</h5>
+
+      <span class="badge bg-primary">
+        {{ note.subject }}
+      </span>
+
+      <p class="mt-2">
+        {{ note.description|truncatewords:20 }}
+      </p>
+
+      <!-- TEXT CONTENT -->
+      {% if note.content %}
+      <a class="btn btn-sm btn-success"
+         data-bs-toggle="collapse"
+         href="#content{{ note.id }}">
+         View Notes
+      </a>
+
+      <div class="collapse mt-2" id="content{{ note.id }}">
+        {{ note.content|safe }}
+      </div>
+      {% endif %}
+
+      <!-- INLINE FILE VIEWER -->
+      {% if note.file %}
+      <a class="btn btn-sm btn-info mt-2"
+         data-bs-toggle="collapse"
+         href="#fileViewer{{ note.id }}">
+         View Document
+      </a>
+      
+      <div class="collapse mt-2" id="fileViewer{{ note.id }}">
+        <div class="ratio ratio-4x3">
+          <!-- #toolbar=0 limits download options in many PDF viewers -->
+          <iframe src="{{ note.file.url }}#toolbar=0" allowfullscreen></iframe>
+        </div>
+      </div>
+      {% endif %}
+
+
+
+    </div>
+
+    <div class="card-footer bg-white">
+      <small class="text-muted">
+        Uploaded: {{ note.uploaded_at|date:"d M Y" }}
+      </small>
+    </div>
+
+  </div>
+</div>
+
+{% empty %}
+  <p>No notes uploaded yet.</p>
+{% endfor %}
+  </div>
+</div>
+
+{% endblock %}

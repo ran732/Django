@@ -3,14 +3,20 @@ from django.shortcuts import render,redirect
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 
+from portal.models import Notice, Event
+
 def homepage(request):
     return HttpResponse("Hello!! This is Ranjeet Singh to help you in your projects.")
 
-def home(request):
-    return render(request, "home/index.html")
-
 def frontpage(request):
-    return render(request, "home/frontpage.html")
+    latest_notices = Notice.objects.order_by('-notice_date')[:3]
+    upcoming_events = Event.objects.order_by('-event_date')[:3]
+    
+    context = {
+        'latest_notices': latest_notices,
+        'upcoming_events': upcoming_events
+    }
+    return render(request, "home/frontpage.html", context)
 
 def login_view(request):
     if request.method == "POST":

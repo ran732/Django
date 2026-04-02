@@ -18,14 +18,19 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path,include
 from college_protal import views
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path('tinymce/', include('tinymce.urls')),  # IMPORTANT
     path('portal',include('portal.urls')),  #connect Portal app here
     path("home",views.homepage,name="homepage"),
-    path("info",views.home,name="home"),
     path("login",views.login_view, name="login"),
     path("ragister",views.ragister_view, name="ragister"),
     path("",views.frontpage, name="frontpage"),
+    
 ]
+
+urlpatterns += static(settings.MEDIA_URL,
+                      document_root=settings.MEDIA_ROOT)

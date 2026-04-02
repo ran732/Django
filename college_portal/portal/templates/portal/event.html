@@ -1,171 +1,355 @@
 {% extends "user/base.html" %}
+{% load static %}
 
+{% block extra_css %}
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<!-- Bootstrap Icons -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+<style>
+/* Global Modern Variables */
+:root {
+    --primary: #1e40af; 
+    --secondary: #10b981; /* Emerald 500 for Events */
+    --accent: #34d399; /* Emerald 400 */
+    --background: #f8fafc; 
+    --surface: #ffffff;
+    --text-main: #0f172a; 
+    --text-muted: #64748b; 
+    --border: #e2e8f0;
+    --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    --shadow-glow: 0 10px 30px rgba(16, 185, 129, 0.3);
+}
+
+body {
+    background: var(--background);
+    font-family: 'Outfit', sans-serif;
+    color: var(--text-main);
+}
+
+/* Page Header Breakout */
+.page-header-breakout {
+    width: 100vw;
+    position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+    margin-top: -24px;
+}
+
+.page-header {
+    background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(16, 185, 129, 0.85)), 
+                url("{% static 'images/campus-bg.jpg' %}") center/cover no-repeat;
+    color: white;
+    padding: 80px 20px;
+    text-align: center;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+.page-header h1 {
+    font-weight: 800;
+    font-size: 3rem;
+    letter-spacing: -0.5px;
+    margin-bottom: 10px;
+}
+
+.page-header .lead {
+    font-size: 1.15rem;
+    font-weight: 300;
+    opacity: 0.9;
+}
+
+/* Event Cards */
+.custom-card {
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    background: var(--surface);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: var(--shadow-sm);
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.custom-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0), rgba(16,185,129,0.05));
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    z-index: -1;
+}
+
+.custom-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--accent);
+}
+
+.custom-card:hover::after {
+    opacity: 1;
+}
+
+/* Card Elements */
+.date-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 14px;
+    background: rgba(16, 185, 129, 0.1);
+    color: var(--secondary);
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 15px;
+    align-self: flex-start;
+}
+
+.card-title-modern {
+    font-weight: 700;
+    font-size: 1.25rem;
+    color: var(--text-main);
+    line-height: 1.4;
+    margin-bottom: 12px;
+}
+
+.card-text-modern {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+/* Event Modal */
+.modal-content {
+    border-radius: 20px;
+    border: none;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    overflow: hidden;
+}
+
+.modal-header {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: white;
+    border-bottom: none;
+    padding: 20px 30px;
+}
+
+.modal-title {
+    font-weight: 700;
+    letter-spacing: -0.5px;
+}
+
+.modal-body {
+    padding: 30px;
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: var(--text-main);
+}
+
+.modal-body hr {
+    opacity: 0.1;
+    margin: 20px 0;
+}
+
+/* Buttons */
+.btn-modern {
+    background: transparent;
+    color: var(--secondary);
+    border: 2px solid var(--secondary);
+    font-weight: 600;
+    border-radius: 12px;
+    padding: 8px 20px;
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.btn-modern:hover {
+    background: var(--secondary);
+    color: white;
+    box-shadow: var(--shadow-glow);
+}
+
+.section-title {
+    font-weight: 800;
+    color: var(--text-main);
+    position: relative;
+    padding-left: 20px;
+}
+
+.section-title::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 6px;
+    height: 80%;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    border-radius: 4px;
+}
+</style>
+{% endblock %}
 
 {% block content %}
 
-<!-- ================= HEADER ================= -->
-<section class="bg-primary text-white py-5">
-    <div class="container text-center">
-        <h1 class="fw-bold">🎉 College Events</h1>
-        <p class="lead">Stay updated with upcoming and recent events</p>
-    </div>
-</section>
-
-
-<!-- ================= EVENTS SECTION ================= -->
-<section class="py-5 bg-light">
-<div class="container">
-
-    <h2 class="text-center mb-5 fw-bold text-dark">
-        Upcoming Events
-    </h2>
-
-    <div class="row g-4">
-
-        {% for event in events %}
-
-        <!-- EVENT CARD -->
-        <div class="col-md-6 col-lg-4">
-
-            <div class="card event-card h-100 shadow-sm border-0">
-
-                <!-- Card Body -->
-                <div class="card-body d-flex flex-column">
-
-                    <!-- Event Title -->
-                    <h4 class="card-title text-primary fw-semibold">
-                        <center>{{ event.name }}</center>
-                    </h4>
-
-                    <!-- Date -->
-                    <p class="text-muted mb-2">
-                        <center>📅 {{ event.event_date }}</center>
-                    </p>
-
-                    <!-- Details Preview -->
-                    <p class="card-text flex-grow-1">
-                        {{ event.details|safe }}
-                    </p>
-
-                    <!-- Button -->
-                    <button class="btn btn-outline-primary mt-3"
-                            data-bs-toggle="modal"
-                            data-bs-target="#eventModal{{ event.id }}">
-                        View Details
-                    </button>
-
-                </div>
-
-            </div>
+<!-- ================= HERO SECTION ================= -->
+<div class="page-header-breakout">
+    <section class="page-header">
+        <div class="container">
+            <h1><i class="bi bi-calendar2-star-fill me-3"></i>College Events</h1>
+            <p class="lead">Discover workshops, seminars, and cultural festivals happening around you</p>
         </div>
-
-
-        <!-- ================= MODAL ================= -->
-        <div class="modal fade"
-             id="eventModal{{ event.id }}"
-             tabindex="-1">
-
-            <div class="modal-dialog modal-dialog-centered modal-lg">
-                <div class="modal-content">
-
-                    <!-- Header -->
-                    <div class="modal-header bg-primary text-white">
-                        <h5 class="modal-title">
-                            {{ event.name }}
-                        </h5>
-
-                        <button type="button"
-                                class="btn-close btn-close-white"
-                                data-bs-dismiss="modal"></button>
-                    </div>
-
-                    <!-- Body -->
-                    <div class="modal-body">
-
-                        <p class="text-muted">
-                            📅 Event Date: {{ event.event_date }}
-                        </p>
-
-                        <hr>
-
-                        <p>
-                            {{ event.details|safe }}
-                        </p>
-
-                    </div>
-
-                    <!-- Footer -->
-                    <div class="modal-footer">
-                        <button class="btn btn-secondary"
-                                data-bs-dismiss="modal">
-                            Close
-                        </button>
-                    </div>
-
-                </div>
-            </div>
-
-        </div>
-
-        {% empty %}
-
-        <!-- No Events -->
-        <div class="text-center">
-            <h4 class="text-muted">No events available</h4>
-        </div>
-
-        {% endfor %}
-
-    </div>
+    </section>
 </div>
-</section>
 
+<!-- ================= EVENT SECTION ================= -->
+<div class="container my-5 pb-5" style="position: relative; z-index: 2;">
+    
+    <div class="d-flex justify-content-between align-items-end mb-4 ms-2">
+        <h2 class="section-title mb-0">Event Directory</h2>
+    </div>
 
+    <!-- Bootstrap Nav Pills -->
+    <ul class="nav nav-pills custom-pills mb-4" id="event-tab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active rounded-pill px-4" id="upcoming-tab" data-bs-toggle="pill" data-bs-target="#upcoming" type="button" role="tab" aria-controls="upcoming" aria-selected="true" style="border-color: var(--secondary);">
+                <i class="bi bi-calendar-event me-2"></i> Upcoming Events
+            </button>
+        </li>
+        <li class="nav-item ms-2" role="presentation">
+            <button class="nav-link rounded-pill px-4 text-muted" id="past-tab" data-bs-toggle="pill" data-bs-target="#past" type="button" role="tab" aria-controls="past" aria-selected="false">
+                <i class="bi bi-calendar-x me-2"></i> Past Events
+            </button>
+        </li>
+    </ul>
 
+    <div class="tab-content" id="event-tabContent">
+        <!-- UPCOMING EVENTS TAB -->
+        <div class="tab-pane fade show active" id="upcoming" role="tabpanel" aria-labelledby="upcoming-tab">
+            <div class="row g-4">
+                {% for event in upcoming_events %}
+                <!-- EVENT CARD -->
+                <div class="col-lg-4 col-md-6 mb-2">
+                    <div class="card custom-card h-100 p-2" style="border-color: var(--secondary);">
+                        <div class="card-body d-flex flex-column text-start">
+                            <div class="date-badge">
+                                <i class="bi bi-clock-fill me-2"></i> {{ event.event_date|date:"d M, Y" }}
+                            </div>
+                            <h5 class="card-title-modern">{{ event.name }}</h5>
+                            <div class="card-text-modern flex-grow-1">
+                                {{ event.details|safe|truncatewords:20 }}
+                            </div>
+                            <div class="mt-4">
+                                <button class="btn-modern w-100 d-flex justify-content-center align-items-center" data-bs-toggle="modal" data-bs-target="#eventModal{{ event.id }}">
+                                    View Event Details <i class="bi bi-arrow-right ms-2"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-<!-- ================= CUSTOM CSS ================= -->
-<style>
+                <!-- MODAL (Upcoming) -->
+                <div class="modal fade" id="eventModal{{ event.id }}" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title"><i class="bi bi-calendar-event me-2"></i> Event Information</h5>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <h3 class="fw-bold mb-3" style="color: var(--primary);">{{ event.name }}</h3>
+                                <div class="d-inline-flex align-items-center px-3 py-2 bg-light rounded-3 text-muted fw-semibold mb-4 border">
+                                    <i class="bi bi-geo-alt-fill me-2" style="color: var(--secondary);"></i> 
+                                    Event Scheduled for: {{ event.event_date|date:"F d, Y" }}
+                                </div>
+                                <div class="event-content-box p-4 rounded-4" style="background: rgba(16, 185, 129, 0.03); border: 1px dashed var(--border);">
+                                    {{ event.details|safe }}
+                                </div>
+                            </div>
+                            <div class="modal-footer bg-light border-0 py-3 px-4">
+                                <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-/* Event Card Styling */
-.event-card {
-    border-radius: 15px;
-    transition: 0.3s ease;
-}
+                {% empty %}
+                <div class="col-12 py-5 text-center">
+                    <div class="p-5 rounded-4 bg-white shadow-sm border" style="max-width: 500px; margin: 0 auto;">
+                        <i class="bi bi-calendar-check text-success mb-3" style="font-size: 3rem; opacity: 0.8;"></i>
+                        <h4 class="fw-bold text-dark">No Upcoming Events</h4>
+                        <p class="text-muted">Looks like our calendar is clear! Stay tuned for awesome new college events.</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
 
-.event-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 15px 35px rgba(0,0,0,0.15);
-}
+        <!-- PAST EVENTS TAB -->
+        <div class="tab-pane fade" id="past" role="tabpanel" aria-labelledby="past-tab">
+            <div class="row g-4">
+                {% for event in past_events %}
+                <!-- EVENT CARD (Archive Style) -->
+                <div class="col-lg-4 col-md-6 mb-2">
+                    <div class="card custom-card h-100 p-2" style="opacity: 0.85;">
+                        <div class="card-body d-flex flex-column text-start">
+                            <div class="date-badge" style="background: rgba(100, 116, 139, 0.1); color: var(--text-muted);">
+                                <i class="bi bi-calendar-x me-2"></i> {{ event.event_date|date:"d M, Y" }}
+                            </div>
+                            <h5 class="card-title-modern text-muted">{{ event.name }}</h5>
+                            <div class="card-text-modern flex-grow-1">
+                                {{ event.details|safe|truncatewords:20 }}
+                            </div>
+                            <div class="mt-4">
+                                <button class="btn-modern w-100 d-flex justify-content-center align-items-center" style="color: var(--text-muted); border-color: var(--border);" data-bs-toggle="modal" data-bs-target="#pastEventModal{{ event.id }}">
+                                    View Past Event <i class="bi bi-arrow-right ms-2"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-/* Feature Section */
-.feature-box {
-    background: #f8f9fa;
-    border-radius: 12px;
-    transition: 0.3s;
-}
+                <!-- MODAL (Archive Style) -->
+                <div class="modal fade" id="pastEventModal{{ event.id }}" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header bg-secondary">
+                                <h5 class="modal-title"><i class="bi bi-archive-fill me-2"></i> Past Event Details</h5>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <h3 class="fw-bold mb-3 text-muted">{{ event.name }}</h3>
+                                <div class="d-inline-flex align-items-center px-3 py-2 bg-light rounded-3 text-muted fw-semibold mb-4 border">
+                                    <i class="bi bi-calendar-x me-2 text-secondary"></i> 
+                                    Event Concluded on: {{ event.event_date|date:"F d, Y" }}
+                                </div>
+                                <div class="event-content-box p-4 rounded-4" style="background: rgba(100, 116, 139, 0.05); border: 1px dashed var(--border); opacity: 0.9;">
+                                    {{ event.details|safe }}
+                                </div>
+                            </div>
+                            <div class="modal-footer bg-light border-0 py-3 px-4">
+                                <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-.feature-box:hover {
-    background: #e9ecef;
-    transform: scale(1.05);
-}
+                {% empty %}
+                <div class="col-12 py-5 text-center">
+                    <div class="p-5 rounded-4 bg-white shadow-sm border" style="max-width: 500px; margin: 0 auto;">
+                        <i class="bi bi-journal-x text-muted" style="font-size: 3rem; opacity: 0.5;"></i>
+                        <h4 class="mt-4 fw-bold text-dark">No Past Events</h4>
+                        <p class="text-muted">There is no history of past events found.</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
 
-/* Modal Smooth Animation */
-.modal-content {
-    border-radius: 12px;
-}
-
-/* Typography Improvement */
-h1, h2, h3, h4 {
-    letter-spacing: 0.5px;
-}
-
-/* Responsive spacing */
-@media(max-width:768px){
-    .event-card {
-        margin-bottom: 20px;
-    }
-}
-
-</style>
+</div>
 
 {% endblock %}

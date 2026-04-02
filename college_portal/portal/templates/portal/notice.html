@@ -1,174 +1,354 @@
-
-
-
 {% extends "user/base.html" %}
 {% load static %}
+
+{% block extra_css %}
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<!-- Bootstrap Icons -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+<style>
+/* Global Modern Variables */
+:root {
+    --primary: #1e40af; 
+    --secondary: #3b82f6; 
+    --accent: #60a5fa; 
+    --background: #f8fafc; 
+    --surface: #ffffff;
+    --text-main: #0f172a; 
+    --text-muted: #64748b; 
+    --border: #e2e8f0;
+    --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    --shadow-glow: 0 10px 30px rgba(59, 130, 246, 0.3);
+}
+
+body {
+    background: var(--background);
+    font-family: 'Outfit', sans-serif;
+    color: var(--text-main);
+}
+
+/* Page Header Breakout */
+.page-header-breakout {
+    width: 100vw;
+    position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+    margin-top: -24px;
+}
+
+.page-header {
+    background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(30, 64, 175, 0.85)), 
+                url("{% static 'images/campus-bg.jpg' %}") center/cover no-repeat;
+    color: white;
+    padding: 80px 20px;
+    text-align: center;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+.page-header h1 {
+    font-weight: 800;
+    font-size: 3rem;
+    letter-spacing: -0.5px;
+    margin-bottom: 10px;
+}
+
+.page-header .lead {
+    font-size: 1.15rem;
+    font-weight: 300;
+    opacity: 0.9;
+}
+
+/* Notice Cards */
+.custom-card {
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    background: var(--surface);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: var(--shadow-sm);
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.custom-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0), rgba(59,130,246,0.05));
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    z-index: -1;
+}
+
+.custom-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--accent);
+}
+
+.custom-card:hover::after {
+    opacity: 1;
+}
+
+/* Card Elements */
+.date-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 14px;
+    background: rgba(59, 130, 246, 0.1);
+    color: var(--secondary);
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 15px;
+    align-self: flex-start;
+}
+
+.card-title-modern {
+    font-weight: 700;
+    font-size: 1.25rem;
+    color: var(--text-main);
+    line-height: 1.4;
+    margin-bottom: 12px;
+}
+
+.card-text-modern {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+/* Notice Modal */
+.modal-content {
+    border-radius: 20px;
+    border: none;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    overflow: hidden;
+}
+
+.modal-header {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: white;
+    border-bottom: none;
+    padding: 20px 30px;
+}
+
+.modal-title {
+    font-weight: 700;
+    letter-spacing: -0.5px;
+}
+
+.modal-body {
+    padding: 30px;
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: var(--text-main);
+}
+
+.modal-body hr {
+    opacity: 0.1;
+    margin: 20px 0;
+}
+
+/* Buttons */
+.btn-modern {
+    background: transparent;
+    color: var(--secondary);
+    border: 2px solid var(--secondary);
+    font-weight: 600;
+    border-radius: 12px;
+    padding: 8px 20px;
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.btn-modern:hover {
+    background: var(--secondary);
+    color: white;
+    box-shadow: var(--shadow-glow);
+}
+
+.section-title {
+    font-weight: 800;
+    color: var(--text-main);
+    position: relative;
+    padding-left: 20px;
+}
+
+.section-title::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 6px;
+    height: 80%;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    border-radius: 4px;
+}
+</style>
+{% endblock %}
 
 {% block content %}
 
 <!-- ================= HERO SECTION ================= -->
-<section class="bg-primary text-white py-5">
-    <div class="container text-center">
-        <h1 class="fw-bold">📢 College Notices</h1>
-        <p class="lead">
-            Important announcements and updates for students
-        </p>
-    </div>
-</section>
-
+<div class="page-header-breakout">
+    <section class="page-header">
+        <div class="container">
+            <h1><i class="bi bi-megaphone-fill me-3"></i>College Notices</h1>
+            <p class="lead">Official announcements, academic updates, and daily briefings</p>
+        </div>
+    </section>
+</div>
 
 <!-- ================= NOTICE SECTION ================= -->
-<section class="py-5 bg-light">
-<div class="container">
-
-    <h2 class="text-center fw-bold mb-5 text-dark">
-        Latest Announcements
-    </h2>
-
-    <div class="row g-4">
-
-        {% for notice in notices %}
-
-        <!-- NOTICE CARD -->
-        <div class="col-md-6 col-lg-4">
-
-            <div class="card notice-card h-100 shadow-sm border-0">
-
-                <div class="card-body d-flex flex-column">
-
-                    <!-- Title -->
-                    <h5 class="card-title text-primary fw-semibold">
-                        <center>{{ notice.title }}</center>
-                    </h5>
-
-                    <!-- Date -->
-                    <p class="text-muted mb-2">
-                        <center>🗓 {{ notice.notice_date }}</center>
-                    </p>
-
-                    <!-- Preview -->
-                    <p class="card-text flex-grow-1">
-                        {{ notice.description|safe }}
-                    </p>
-
-                    <!-- Button -->
-                    <button class="btn btn-outline-primary mt-3"
-                            data-bs-toggle="modal"
-                            data-bs-target="#noticeModal{{ notice.id }}">
-                        View Full Notice
-                    </button>
-
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <!-- ================= MODAL ================= -->
-        <div class="modal fade"
-             id="noticeModal{{ notice.id }}"
-             tabindex="-1">
-
-            <div class="modal-dialog modal-dialog-centered modal-lg">
-                <div class="modal-content">
-
-                    <!-- Header -->
-                    <div class="modal-header bg-primary text-white">
-                        <h5 class="modal-title">
-                            {{ notice.title }}
-                        </h5>
-
-                        <button type="button"
-                                class="btn-close btn-close-white"
-                                data-bs-dismiss="modal"></button>
-                    </div>
-
-                    <!-- Body -->
-                    <div class="modal-body">
-
-                        <p class="text-muted">
-                            📅 Published: {{ notice.notice_date }}
-                        </p>
-
-                        <hr>
-
-                        <div>
-                            {{ notice.description|safe }}
-                        </div>
-
-                    </div>
-
-                    <!-- Footer -->
-                    <div class="modal-footer">
-                        <button class="btn btn-secondary"
-                                data-bs-dismiss="modal">
-                            Close
-                        </button>
-                    </div>
-
-                </div>
-            </div>
-
-        </div>
-
-        {% empty %}
-
-        <div class="text-center py-5">
-            <h4 class="text-muted">No notices available</h4>
-        </div>
-
-        {% endfor %}
-
+<div class="container my-5 pb-5" style="position: relative; z-index: 2;">
+    
+    <div class="d-flex justify-content-between align-items-end mb-4 ms-2">
+        <h2 class="section-title mb-0">Notice Board</h2>
     </div>
 
+    <!-- Bootstrap Nav Pills -->
+    <ul class="nav nav-pills custom-pills mb-4" id="notice-tab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active rounded-pill px-4" id="upcoming-tab" data-bs-toggle="pill" data-bs-target="#upcoming" type="button" role="tab" aria-controls="upcoming" aria-selected="true">
+                <i class="bi bi-megaphone-fill me-2"></i> Upcoming Notices
+            </button>
+        </li>
+        <li class="nav-item ms-2" role="presentation">
+            <button class="nav-link rounded-pill px-4 text-muted" id="past-tab" data-bs-toggle="pill" data-bs-target="#past" type="button" role="tab" aria-controls="past" aria-selected="false">
+                <i class="bi bi-clock-history me-2"></i> Past Notices
+            </button>
+        </li>
+    </ul>
+
+    <div class="tab-content" id="notice-tabContent">
+        <!-- UPCOMING NOTICES TAB -->
+        <div class="tab-pane fade show active" id="upcoming" role="tabpanel" aria-labelledby="upcoming-tab">
+            <div class="row g-4">
+                {% for notice in upcoming_notices %}
+                <!-- NOTICE CARD -->
+                <div class="col-lg-4 col-md-6 mb-2">
+                    <div class="card custom-card h-100 p-2 border-primary">
+                        <div class="card-body d-flex flex-column text-start">
+                            <div class="date-badge">
+                                <i class="bi bi-calendar3 me-2"></i> {{ notice.notice_date|date:"d M, Y" }}
+                            </div>
+                            <h5 class="card-title-modern">{{ notice.title }}</h5>
+                            <div class="card-text-modern flex-grow-1">
+                                {{ notice.description|safe|truncatewords:20 }}
+                            </div>
+                            <div class="mt-4">
+                                <button class="btn-modern w-100 d-flex justify-content-center align-items-center" data-bs-toggle="modal" data-bs-target="#noticeModal{{ notice.id }}">
+                                    Read Full Notice <i class="bi bi-arrow-right ms-2"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MODAL -->
+                <div class="modal fade" id="noticeModal{{ notice.id }}" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title"><i class="bi bi-info-circle-fill me-2"></i> Notice Details</h5>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <h3 class="fw-bold mb-3" style="color: var(--primary);">{{ notice.title }}</h3>
+                                <div class="d-inline-flex align-items-center px-3 py-2 bg-light rounded-3 text-muted fw-semibold mb-4 border">
+                                    <i class="bi bi-calendar-check me-2 text-primary"></i> 
+                                    Published on: {{ notice.notice_date|date:"F d, Y" }}
+                                </div>
+                                <div class="notice-content-box p-4 rounded-4" style="background: rgba(59, 130, 246, 0.03); border: 1px dashed var(--border);">
+                                    {{ notice.description|safe }}
+                                </div>
+                            </div>
+                            <div class="modal-footer bg-light border-0 py-3 px-4">
+                                <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {% empty %}
+                <div class="col-12 py-5 text-center">
+                    <div class="p-5 rounded-4 bg-white shadow-sm border" style="max-width: 500px; margin: 0 auto;">
+                        <i class="bi bi-stars text-primary mb-3" style="font-size: 3rem; opacity: 0.8;"></i>
+                        <h4 class="fw-bold text-dark">No Upcoming Notices</h4>
+                        <p class="text-muted">You're all caught up! There are no upcoming announcements.</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- PAST NOTICES TAB -->
+        <div class="tab-pane fade" id="past" role="tabpanel" aria-labelledby="past-tab">
+            <div class="row g-4">
+                {% for notice in past_notices %}
+                <!-- NOTICE CARD (MUTED STYLING) -->
+                <div class="col-lg-4 col-md-6 mb-2">
+                    <div class="card custom-card h-100 p-2" style="opacity: 0.85;">
+                        <div class="card-body d-flex flex-column text-start">
+                            <div class="date-badge" style="background: rgba(100, 116, 139, 0.1); color: var(--text-muted);">
+                                <i class="bi bi-clock-history me-2"></i> {{ notice.notice_date|date:"d M, Y" }}
+                            </div>
+                            <h5 class="card-title-modern text-muted">{{ notice.title }}</h5>
+                            <div class="card-text-modern flex-grow-1">
+                                {{ notice.description|safe|truncatewords:20 }}
+                            </div>
+                            <div class="mt-4">
+                                <button class="btn-modern w-100 d-flex justify-content-center align-items-center" style="color: var(--text-muted); border-color: var(--border);" data-bs-toggle="modal" data-bs-target="#pastNoticeModal{{ notice.id }}">
+                                    View Archive <i class="bi bi-arrow-right ms-2"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MODAL (Archive Style) -->
+                <div class="modal fade" id="pastNoticeModal{{ notice.id }}" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header bg-secondary">
+                                <h5 class="modal-title"><i class="bi bi-archive-fill me-2"></i> Archived Notice</h5>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <h3 class="fw-bold mb-3 text-muted">{{ notice.title }}</h3>
+                                <div class="d-inline-flex align-items-center px-3 py-2 bg-light rounded-3 text-muted fw-semibold mb-4 border">
+                                    <i class="bi bi-calendar-x me-2 text-secondary"></i> 
+                                    Past Date: {{ notice.notice_date|date:"F d, Y" }}
+                                </div>
+                                <div class="notice-content-box p-4 rounded-4" style="background: rgba(100, 116, 139, 0.05); border: 1px dashed var(--border); opacity: 0.9;">
+                                    {{ notice.description|safe }}
+                                </div>
+                            </div>
+                            <div class="modal-footer bg-light border-0 py-3 px-4">
+                                <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {% empty %}
+                <div class="col-12 py-5 text-center">
+                    <div class="p-5 rounded-4 bg-white shadow-sm border" style="max-width: 500px; margin: 0 auto;">
+                        <i class="bi bi-inbox-fill text-muted" style="font-size: 3rem; opacity: 0.5;"></i>
+                        <h4 class="mt-4 fw-bold text-dark">No Past Notices</h4>
+                        <p class="text-muted">There is no history of past announcements.</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
 </div>
-</section>
-
-
-
-<!-- ================= CUSTOM CSS ================= -->
-<style>
-
-/* Notice Cards */
-.notice-card{
-    border-radius: 15px;
-    transition: 0.3s ease;
-}
-
-.notice-card:hover{
-    transform: translateY(-8px);
-    box-shadow: 0 15px 35px rgba(0,0,0,0.15);
-}
-
-/* Info Section */
-.info-box{
-    background:#f8f9fa;
-    border-radius:12px;
-    transition:0.3s;
-}
-
-.info-box:hover{
-    background:#e9ecef;
-    transform:scale(1.05);
-}
-
-/* Modal Styling */
-.modal-content{
-    border-radius:12px;
-}
-
-/* Typography */
-h1,h2,h3,h4{
-    letter-spacing:0.5px;
-}
-
-@media(max-width:768px){
-    .notice-card{
-        margin-bottom:20px;
-    }
-}
-
-</style>
 
 {% endblock %}
