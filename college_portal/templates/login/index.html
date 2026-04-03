@@ -183,7 +183,7 @@ input:-webkit-autofill:active{
         </div>
 
         <!-- Form Start -->
-        <form method="POST" autocomplete="off">
+        <form method="POST" action="{% url 'frontpage' %}">
             {% csrf_token %}
             
             <!-- Username -->
@@ -214,22 +214,12 @@ input:-webkit-autofill:active{
             {% endif %}
 
             <!-- Login Button -->
-            <button type="submit" class="btn btn-primary btn-primary-auth text-white"><a href="{% url 'frontpage'%}"></a>Login Securely</button>
+            <button type="submit" class="btn btn-primary btn-primary-auth text-white">Login Securely</button>
         </form>
 
         <div class="divider">Or continue with</div>
 
-        <!-- All Possible Ways of Login (Socials) -->
-        <a href="#" class="social-btn">
-            <i class="bi bi-google text-danger"></i> Sign in with Google
-        </a>
-        <a href="#" class="social-btn">
-            <i class="bi bi-microsoft text-info"></i> Sign in with Microsoft
-        </a>
-        <a href="#" class="social-btn mb-4">
-            <i class="bi bi-apple text-light"></i> Sign in with Apple
-        </a>
-
+       
         <!-- Footer -->
         <div class="bottom-links border-top pt-3" style="border-color: rgba(255,255,255,0.1) !important;">
             <p class="mb-0 text-light small">

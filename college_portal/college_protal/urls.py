@@ -25,10 +25,11 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path('tinymce/', include('tinymce.urls')),  # IMPORTANT
     path('portal',include('portal.urls')),  #connect Portal app here
+    path('accounts/', include('allauth.urls')), #google login
     path("home",views.homepage,name="homepage"),
     path("login",views.login_view, name="login"),
     path("ragister",views.ragister_view, name="ragister"),
-    path("",views.frontpage, name="frontpage"),
+    path("",views.frontpage, name="frontpage"), 
     
 ]
 

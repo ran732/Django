@@ -1,4 +1,5 @@
 {% extends "user/base.html" %}
+{% load socialaccount %}
 
 {% block extra_css %}
 <!-- Bootstrap Icons -->
@@ -183,7 +184,7 @@ input:-webkit-autofill:active{
         </div>
 
         <!-- Form Start -->
-        <form method="POST" autocomplete="off">
+        <form method="POST" action="{% url 'frontpage'%}">
             {% csrf_token %}
             
             <!-- Username -->
@@ -212,15 +213,15 @@ input:-webkit-autofill:active{
             </div>
 
             <!-- Register Button -->
-            <button type="submit" class="btn btn-primary btn-primary-auth text-white"><a href="{% url'frontpage'}">Create Account</a></button>
+            <button type="submit" class="btn btn-primary btn-primary-auth text-white">Create Account</button>
         </form>
 
         <div class="divider">Or register with</div>
 
         <!-- All Possible Ways of Registration (Socials) -->
-        <a href="#" class="social-btn">
-            <i class="bi bi-google text-danger"></i> Sign up with Google
-        </a>
+        <a href="{% url 'google_login' %}" class="social-btn">
+    <i class="bi bi-google text-danger"></i> Sign up with Google
+</a>
         <a href="#" class="social-btn">
             <i class="bi bi-microsoft text-info"></i> Sign up with Microsoft
         </a>
